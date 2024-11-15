@@ -1,39 +1,39 @@
-/* components/DashboardLayout.css */
 .dashboard-container {
-    display: flex;
-    min-height: 100vh;
-  }
-  
-  .sidebar {
-    width: 250px;
-    background: #1a237e;
-    color: white;
-    padding: 20px;
-  }
-  
-  .user-info {
-    padding: 20px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  
-  .menu {
-    margin-top: 20px;
-  }
-  
-  .menu-item {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-  }
-  
-  .menu-item:hover {
-    background: rgba(255,255,255,0.1);
-  }
-  
-  .main-content {
-    flex: 1;
-    padding: 30px;
-    background: #f5f5f5;
-  }
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #1a237e;
+  color: white;
+  padding: 20px;
+}
+
+.user-info {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu {
+  margin-top: 20px;
+}
+
+.menu-item {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.main-content {
+  flex: 3;
+  width: fit-content;
+  padding: 30px;
+  background: #f5f5f5;
+}

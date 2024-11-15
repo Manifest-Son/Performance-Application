@@ -1,0 +1,50 @@
+/* components/DashboardCard.css */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .dashboard-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-left: 4px solid;
+    display: flex;
+    align-items: center;
+  }
+  
+  .card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+  
+  .card-icon i {
+    color: white;
+    font-size: 1.5rem;
+  }
+  
+  .card-content h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .card-value {
+    margin: 5px 0 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .section-title {
+    margin: 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+  }

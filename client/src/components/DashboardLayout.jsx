@@ -1,8 +1,8 @@
 // components/DashboardLayout.jsx
 // eslint-disable-next-line no-unused-vars
-import React from 'react';
-import PropTypes from 'prop-types';
-import './DashboardLayout.css';
+import React from "react";
+import PropTypes from "prop-types";
+import "./DashboardLayout.css";
 
 const DashboardLayout = ({ menuItems, children, userRole }) => {
   return (
@@ -20,9 +20,7 @@ const DashboardLayout = ({ menuItems, children, userRole }) => {
           ))}
         </nav>
       </div>
-      <main className="main-content">
-        {children}
-      </main>
+      <main className="main-content">{children}</main>
     </div>
   );
 };
@@ -31,7 +29,7 @@ DashboardLayout.propTypes = {
     PropTypes.shape({
       icon: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
   children: PropTypes.node.isRequired,
   userRole: PropTypes.string.isRequired,
