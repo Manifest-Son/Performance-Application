@@ -27,12 +27,12 @@ const DashboardLayout = ({ menuItems, children, userRole }) => {
 DashboardLayout.propTypes = {
   menuItems: PropTypes.arrayOf(
     PropTypes.shape({
-      icon: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
+      icon: PropTypes,
+      label: PropTypes,
     }),
   ).isRequired,
-  children: PropTypes.node.isRequired,
-  userRole: PropTypes.string.isRequired,
+  children: PropTypes.node,
+  userRole: PropTypes.string,
 };
 
 export default DashboardLayout;

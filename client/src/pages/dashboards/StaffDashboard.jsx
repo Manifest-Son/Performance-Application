@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
 import DashboardLayout from "../../components/DashboardLayout";
+import StaffDashboardContent from "./StaffDashboardContent";
 
 const staffMenuItems = [
   { label: "Overview", icon: "fas fa-home" },
@@ -13,7 +14,8 @@ const StaffDashboard = () => {
   return (
     <DashboardLayout menuItems={staffMenuItems} userRole="Staff">
       <h1>Staff Dashboard</h1>
-      {/* Add staff-specific content here */}
+      
+      <StaffDashboardContent />
     </DashboardLayout>
   );
 };
