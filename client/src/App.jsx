@@ -7,6 +7,9 @@ import LecturerDashboard from "./pages/dashboards/LecturerDashboard";
 import StudentDashboard from "./pages/dashboards/StudentsDashboard";
 import Header from "./components/Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AddTask from "./pages/tasks/AddTask";
+import UpdateTask from "./pages/tasks/UpdateTask";
+import DeleteTask from "./pages/tasks/DeleteTask";
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path="/" element={<AdminDashboard />} />
         <Route path="login" element={<Login />} />
         <Route path="signin" element={<Signin />} />
+        <Route path="add-task" element={<AddTask />} />
+        <Route path="update-task" element={<UpdateTask />} />
+        <Route path="delete-task" element={<DeleteTask />} />
         <Route path="lecturer" element={<LecturerDashboard />} />
         <Route path="staff" element={<StaffDashboard />} />
         <Route path="admin" element={<AdminDashboard />} />
