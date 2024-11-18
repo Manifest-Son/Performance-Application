@@ -1,8 +1,8 @@
 import DashboardCard from "../../components/DashboardCard";
 
 const StaffDashboardContent = () => {
-    return(
-        <div className="dashboard-content">
+  return (
+    <div className="dashboard-content">
       <h2 className="section-title">Overview</h2>
       <div className="cards-grid">
         <DashboardCard
@@ -30,7 +30,7 @@ const StaffDashboardContent = () => {
           color="#9C27B0"
         />
       </div>
-  
+
       <h2 className="section-title">System Status</h2>
       <div className="cards-grid">
         <DashboardCard
@@ -47,7 +47,7 @@ const StaffDashboardContent = () => {
         />
       </div>
     </div>
-    )
-}
+  );
+};
 
-export default StaffDashboardContent
+export default StaffDashboardContent;

@@ -10,10 +10,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AddTask from "./pages/tasks/AddTask";
 import UpdateTask from "./pages/tasks/UpdateTask";
 import DeleteTask from "./pages/tasks/DeleteTask";
+import AssignTask from "./pages/tasks/AssignTask";
 
 function App() {
   return (
-      <BrowserRouter>
+    <BrowserRouter>
       <Header />
       <Routes>
         <Route path="/" element={<AdminDashboard />} />
@@ -22,6 +23,7 @@ function App() {
         <Route path="add-task" element={<AddTask />} />
         <Route path="update-task" element={<UpdateTask />} />
         <Route path="delete-task" element={<DeleteTask />} />
+        <Route path="assign-task" element={<AssignTask />} />
         <Route path="lecturer" element={<LecturerDashboard />} />
         <Route path="staff" element={<StaffDashboard />} />
         <Route path="admin" element={<AdminDashboard />} />

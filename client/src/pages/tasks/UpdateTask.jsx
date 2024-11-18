@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from 'react';
-import TaskModal from '../../components/TaskModal';
+import React, { useState } from "react";
+import TaskModal from "../../components/TaskModal";
 
 // eslint-disable-next-line react/prop-types
 const UpdateTask = ({ task }) => {
@@ -8,7 +8,7 @@ const UpdateTask = ({ task }) => {
 
   const handleSubmit = async (values) => {
     // Handle task update logic here
-    console.log('Updating task:', values);
+    console.log("Updating task:", values);
   };
 
   return (
@@ -25,4 +25,4 @@ const UpdateTask = ({ task }) => {
   );
 };
 
-export default UpdateTask
+export default UpdateTask;

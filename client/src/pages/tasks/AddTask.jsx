@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from 'react';
-import TaskModal from '../../components/TaskModal';
+import React, { useState } from "react";
+import TaskModal from "../../components/TaskModal";
 
 const AddTask = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async (values) => {
     // Handle task creation logic here
-    console.log('Creating task:', values);
+    console.log("Creating task:", values);
   };
 
   return (
@@ -23,4 +23,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask
+export default AddTask;

@@ -1,18 +1,54 @@
-import {Router} from "express"
+import { Router } from "express";
+import {
+  signupUser,
+  loginUser,
+  deleteUser,
+  updateUser,
+  getAllUsers,
+  getUserById,
+} from "../controllers/users.controllers.js";
+import { authenticateToken } from "../middlewares/auth.js";
+import {
+  validateSignup,
+  validateLogin,
+  validateUserId,
+  validateUpdateUser,
+} from "../middlewares/users.middlewares.js";
+import { validationResult } from "express-validator";
 
-const router = Router()
+const router = Router();
 
-router.get("/", (req,res) => {
-    res.send("I am displaying on port 3000")
-})
-router.post("/", (req,res) => {
-    res.send("I am displaying on port 3000")
-})
-router.patch("/", (req,res) => {
-    res.send("I am displaying on port 3000")
-})
-router.delete("/", (req,res) => {
-    res.send("I am displaying on port 3000")
-})
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json("An error has occured.");
+  }
+  next();
+};
 
-export default router
+router.post("/signup", validateSignup, handleValidationErrors, signupUser);
+router.post("/login", validateLogin, handleValidationErrors, loginUser);
+router.delete(
+  "/:userId",
+  // authenticateToken,
+  // validateUserId,
+  // handleValidationErrors,
+  deleteUser,
+);
+router.patch(
+  "/:userId",
+  // authenticateToken,
+  validateUpdateUser,
+  handleValidationErrors,
+  updateUser,
+);
+router.get("/", getAllUsers);
+router.get(
+  "/:userId",
+  // authenticateToken,
+  validateUserId,
+  handleValidationErrors,
+  getUserById,
+);
+
+export default router;

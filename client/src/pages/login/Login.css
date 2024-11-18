@@ -1,95 +1,95 @@
 /* src/pages/login/Login.css */
-.login-wrapper{
+.login-wrapper {
   width: 100%;
   font-size: 1.1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color:#007bff
+  background-color: #007bff;
 }
 .login-container {
-    min-height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-  }
-  
-  .login-card {
-    background: white;
-    padding: 3rem;
-    border-radius: 1.25rem;
-    box-shadow: 0 0.6rem 1.25rem rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 25rem;
-  }
-  
-  .login-card h1 {
-    margin: 0 0 0.6rem;
-    font-size: 1.5rem;
-    color: #333;
-  }
-  
-  .subtitle {
-    color: #666;
-    margin-bottom: 1.875rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1.25rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #333;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    transition: border-color 0.3s;
-  }
-  
-  .form-group input:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  .remeber-me, .forgot-password{
-    font-size: .9rem;
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 0.7rem;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .login-button:hover {
-    background: #0056b3;
-  }
-  
-  .error-message {
-    font-size: .9rem;
-    background: #fff3f3;
-    color: #dc3545;
-    padding: .5rem;
-    border-radius: 8px;
-    margin-bottom: 1.25rem;
-  }
-  
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.login-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 0.6rem 1.25rem rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 25rem;
+}
+
+.login-card h1 {
+  margin: 0 0 0.6rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 1.875rem;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.remeber-me,
+.forgot-password {
+  font-size: 0.9rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.7rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-button:hover {
+  background: #0056b3;
+}
+
+.error-message {
+  font-size: 0.9rem;
+  background: #fff3f3;
+  color: #dc3545;
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+}

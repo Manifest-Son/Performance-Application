@@ -14,7 +14,7 @@ const StudentDashboard = () => {
   return (
     <DashboardLayout menuItems={studentMenuItems} userRole="Student">
       <h1>Student Dashboard</h1>
-      <StudentDashboardContent/>
+      <StudentDashboardContent />
     </DashboardLayout>
   );
 };

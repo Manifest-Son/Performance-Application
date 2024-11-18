@@ -1,80 +1,82 @@
 /* src/pages/signin/Signin.css */
-.signin-wrapper{
+.signin-wrapper {
   background-color: #007bff;
   font-size: 1rem;
 }
 .signin-container {
-    min-height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
-    padding: 1.25rem;
-  }
-   
-  .signin-card {
-    background: white;
-    padding: 2.5rem;
-    border-radius: 1.25rem;
-    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 25rem;
-  }
-  .form-group {
-    margin-bottom: 1.25rem;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: .5rem;
-    color: #333;
-  }
-  
-  .form-group input, .form-group select {
-    width: 100%;
-    padding: .7rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-  }
-  
-  .form-group input:focus, .form-group select:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .signin-button {
-    width: 100%;
-    padding: 12px;
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .signin-button:hover {
-    background: #0056b3;
-  }
-  .login-link{
-    margin-top: .5rem;
-  }
-  
-  .error-message {
-    font-size: .9rem;
-    background: #fff3f3;
-    color: #dc3545;
-    padding: .5rem;
-    border-radius: 8px;
-    margin-bottom: 1.25rem;
-  }
+  min-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
+  padding: 1.25rem;
+}
+
+.signin-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 25rem;
+}
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.signin-button {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.signin-button:hover {
+  background: #0056b3;
+}
+.login-link {
+  margin-top: 0.5rem;
+}
+
+.error-message {
+  font-size: 0.9rem;
+  background: #fff3f3;
+  color: #dc3545;
+  padding: 0.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+}

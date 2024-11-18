@@ -11,7 +11,7 @@ import { MdOutlineTaskAlt } from "react-icons/md";
 import { HiDocumentReport } from "react-icons/hi";
 
 const adminMenuItems = [
-  { label: "Overview", icon: <MdOutlineViewQuilt />} ,
+  { label: "Overview", icon: <MdOutlineViewQuilt /> },
   { label: "Lecturers", icon: <GiTeacher /> },
   { label: "Staff", icon: <BsPersonVcard /> },
   { label: "Reviews", icon: <MdOutlineRateReview /> },

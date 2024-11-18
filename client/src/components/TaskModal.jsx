@@ -1,48 +1,54 @@
 // eslint-disable-next-line no-unused-vars
-import React from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import './TaskModal.css';
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import "./TaskModal.css";
 
 const validationSchema = Yup.object({
   title: Yup.string()
-    .required('Title is required')
-    .min(3, 'Title must be at least 3 characters'),
+    .required("Title is required")
+    .min(3, "Title must be at least 3 characters"),
   description: Yup.string()
-    .required('Description is required')
-    .min(10, 'Description must be at least 10 characters'),
+    .required("Description is required")
+    .min(10, "Description must be at least 10 characters"),
   dueDate: Yup.date()
-    .required('Due date is required')
-    .min(new Date(), 'Due date cannot be in the past'),
+    .required("Due date is required")
+    .min(new Date(), "Due date cannot be in the past"),
   priority: Yup.string()
-    .oneOf(['low', 'medium', 'high'], 'Invalid priority')
-    .required('Priority is required'),
+    .oneOf(["low", "medium", "high"], "Invalid priority")
+    .required("Priority is required"),
   status: Yup.string()
-    .oneOf(['pending', 'in-progress', 'completed'], 'Invalid status')
-    .required('Status is required')
+    .oneOf(["pending", "in-progress", "completed"], "Invalid status")
+    .required("Status is required"),
 });
 
 // eslint-disable-next-line react/prop-types
-const TaskModal = ({ isOpen, onClose, initialValues, onSubmit, mode = 'create' }) => {
+const TaskModal = ({
+  isOpen,
+  onClose,
+  initialValues,
+  onSubmit,
+  mode = "create",
+}) => {
   const defaultValues = {
-    title: '',
-    description: '',
-    dueDate: '',
-    priority: 'medium',
-    status: 'pending',
-    ...initialValues
+    title: "",
+    description: "",
+    dueDate: "",
+    priority: "medium",
+    status: "pending",
+    ...initialValues,
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     await onSubmit(values);
     setSubmitting(false);
     onClose();
-  } 
+  };
 
   const formik = useFormik({
     initialValues: defaultValues,
     validationSchema,
-    onSubmit: handleSubmit
+    onSubmit: handleSubmit,
   });
 
   if (!isOpen) return null;
@@ -54,9 +60,11 @@ const TaskModal = ({ isOpen, onClose, initialValues, onSubmit, mode = 'create' }
         <div className="modal-content">
           <div className="modal-header">
             <h1 className="modal-title">
-              {mode === 'create' ? 'Create New Task' : 'Update Task'}
+              {mode === "create" ? "Create New Task" : "Update Task"}
             </h1>
-            <button className="close-button" onClick={onClose}>×</button>
+            <button className="close-button" onClick={onClose}>
+              ×
+            </button>
           </div>
 
           <form onSubmit={formik.handleSubmit} className="task-form">
@@ -146,9 +154,12 @@ const TaskModal = ({ isOpen, onClose, initialValues, onSubmit, mode = 'create' }
               className="submit-button"
             >
               {formik.isSubmitting
-                ? mode === 'create' ? 'Creating...' : 'Updating...'
-                : mode === 'create' ? 'Create Task' : 'Update Task'
-              }
+                ? mode === "create"
+                  ? "Creating..."
+                  : "Updating..."
+                : mode === "create"
+                  ? "Create Task"
+                  : "Update Task"}
             </button>
           </form>
         </div>
