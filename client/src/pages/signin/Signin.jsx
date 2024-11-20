@@ -2,40 +2,69 @@ import "./Signin.css";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { apiURL } from "../../config/config";
+import toast from "react-simple-toasts";
+import "react-simple-toasts/dist/theme/success.css";
+import "react-simple-toasts/dist/theme/failure.css";
+
 
 const validationSchema = Yup.object({
   fname: Yup.string()
     .required("Please enter your full name")
-    .min(6, "Please enter your full name")
+    .min(4, "Please enter your full name")
     .max(20, "Please enter a valid name"),
-  emailAddress: Yup.string()
+    lname: Yup.string()
+    .required("Please enter your full name")
+    .min(4, "Please enter your full name")
+    .max(20, "Please enter a valid name"),
+  email: Yup.string()
     .email("Please enter a valid Email Address")
     .required("Email Address required."),
-  role: Yup.string().required("Role Required"),
   password: Yup.string().required("Password is required"),
   confirmPassword: Yup.string().required("Password required."),
 });
 
 const Signin = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  // const  navigate = useNavigate()
+  const  navigate = useNavigate()
 
   const initialValues = {
     fname: "",
-    emailAddress: "",
+    email: "",
     role: "",
     password: "",
     confirmPassword: "",
   };
 
-  const onSubmit = (formdata) => {
-    if (formdata.password !== formdata.confirmPassword) {
-      setError("The password does not match");
-      return;
-    }
+  const onSubmit = async (formData) => {
     setLoading(true);
+    try {
+      // eslint-disable-next-line no-unused-vars
+      const { confirmPassword, ...signupData } = formData; // Remove confirmPassword from API payload
+      
+      const response = await fetch(`${apiURL}/users/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+        credentials: "include",
+      });
+      console.log(response)
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
+
+      toast("Account created successfully!", { theme: "success", duration: 2000 });
+      navigate("/login");
+    } catch (err) {
+      toast(err.message, { theme: "failure", duration: 3000 });
+    } finally {
+      setLoading(false);
+    }
   };
   const formik = useFormik({
     initialValues,
@@ -49,7 +78,7 @@ const Signin = () => {
           <h1>Create Account</h1>
           <form onSubmit={formik.handleSubmit}>
             <div className="form-group">
-              <label>Full Name</label>
+              <label>First Name</label>
               <input
                 type="text"
                 name="fname"
@@ -64,36 +93,32 @@ const Signin = () => {
             </div>
 
             <div className="form-group">
-              <label>Email Address:</label>
+              <label>Last Name</label>
               <input
-                type="email"
-                name="emailAddress"
-                values={formik.values.emailAddress}
+                type="text"
+                name="lname"
+                values={formik.values.lname}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 required
               />
-              {formik.touched.emailAddress && formik.errors.emailAddress && (
-                <p className="error-message">{formik.errors.emailAddress}</p>
+              {formik.touched.lname && formik.errors.lname && (
+                <p className="error-message">{formik.errors.lname}</p>
               )}
             </div>
+
             <div className="form-group">
-              <label>Role:</label>
-              <select
-                name="role"
-                id="role"
-                values={formik.values.role}
+              <label>Email Address:</label>
+              <input
+                type="email"
+                name="email"
+                values={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-              >
-                <option value="none">--Select a role--</option>
-                <option value="leturer">Lecturer</option>
-                <option value="student">Student</option>
-                <option value="staff">Staff</option>
-                <option value="admin">Admin</option>
-              </select>
-              {formik.touched.role && formik.errors.role && (
-                <p className="error-message">{formik.errors.role}</p>
+                required
+              />
+              {formik.touched.email && formik.errors.email && (
+                <p className="error-message">{formik.errors.email}</p>
               )}
             </div>
 
@@ -129,7 +154,7 @@ const Signin = () => {
                   </p>
                 )}
             </div>
-            {error ? error : ""}
+            {/* {error ? error : ""} */}
 
             <button type="submit" className="signin-button" disabled={loading}>
               {loading ? "Signing In ..." : "Sign In"}

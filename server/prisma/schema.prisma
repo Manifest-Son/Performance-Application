@@ -14,83 +14,84 @@ datasource db {
 }
 
 model User {
-  userId        String          @id @unique @default(uuid())
-  fname         String          @map("first_name")
-  lname         String          @map("last_name")
-  email         String          @unique @map("email_address")
-  password      String
-  role          String?          @default("user")
-  deptId        String?         @map("dept_id")
-  avatar        String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  
+  userId    String   @id @unique @default(uuid())
+  fname     String   @map("first_name")
+  lname     String   @map("last_name")
+  email     String   @unique @map("email_address")
+  password  String
+  role      String?  @default("user")
+  deptId    String?  @map("dept_id")
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // Relations
-  department    Department?     @relation(fields: [deptId], references: [departmentId])
-  createdTasks  Task[]         @relation("TaskCreator")
-  assignments   TaskAssignment[] @relation("Assignee")
-  notifications Notification[]
-  evaluationsGiven Evaluation[] @relation("Evaluator")
-  evaluationsReceived Evaluation[] @relation("Evaluated")
+  department          Department?      @relation(fields: [deptId], references: [departmentId])
+  createdTasks        Task[]           @relation("TaskCreator")
+  assignments         TaskAssignment[] @relation("Assignee")
+  notifications       Notification[]
+  evaluationsGiven    Evaluation[]     @relation("Evaluator")
+  evaluationsReceived Evaluation[]     @relation("Evaluated")
 }
 
 model Task {
-  taskId         String           @id @default(uuid())
+  taskId         String   @id @default(uuid())
   title          String
   description    String
-  creatorId      String?           @map("creator_id")
-  startDate      String           @map("start_date")
-  completionDate String           @map("completion_date")
+  creatorId      String?  @map("creator_id")
+  startDate      String   @map("start_date")
+  completionDate String   @map("completion_date")
   status         String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   // Relations
-  creator        User?             @relation("TaskCreator", fields: [creatorId], references: [userId])
-  assignments    TaskAssignment[]
+  creator     User?            @relation("TaskCreator", fields: [creatorId], references: [userId])
+  assignments TaskAssignment[]
 }
 
 model Notification {
-  notifyId   String   @id @default(uuid()) @map("notify_id")
-  userId     String   @map("user_id")
-  type       String
-  message    String
-  read       Boolean
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  notifyId  String   @id @default(uuid()) @map("notify_id")
+  userId    String   @map("user_id")
+  type      String
+  message   String
+  read      Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  user       User     @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [userId])
 }
 
 model Evaluation {
   evaluationId String   @id @default(uuid()) @map("evaliation_id")
   studentId    String?  @map("student_id")
-  lecturerId  String?  @map("lecturer_id")
-  staffId     String?  @map("staff_id")
-  feedback    String
-  rating      String
-  createdAt   DateTime @default(now())
+  lecturerId   String?  @map("lecturer_id")
+  staffId      String?  @map("staff_id")
+  feedback     String
+  rating       String
+  createdAt    DateTime @default(now())
 
   // Relations
-  evaluator   User?    @relation("Evaluator", fields: [lecturerId], references: [userId])
-  evaluated   User?    @relation("Evaluated", fields: [studentId], references: [userId])
+  evaluator         User?               @relation("Evaluator", fields: [lecturerId], references: [userId])
+  evaluated         User?               @relation("Evaluated", fields: [studentId], references: [userId])
+  EvaluationMetrics EvaluationMetrics[]
 }
 
 model TaskAssignment {
-  assignId     String   @id @default(uuid())
-  taskId       String   @map("task_id")
-  assignee_id  String   @map("assignee_id")
+  assignId     String    @id @default(uuid())
+  taskId       String    @map("task_id")
+  assignee_id  String    @map("assignee_id")
   status       String
-  acceptedAt   DateTime? 
+  acceptedAt   DateTime?
   rejectededAt DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   // Relations
-  task         Task     @relation(fields: [taskId], references: [taskId])
-  assignee     User     @relation("Assignee", fields: [assignee_id], references: [userId])
-  submissions  TaskSubmission[]
+  task        Task             @relation(fields: [taskId], references: [taskId])
+  assignee    User             @relation("Assignee", fields: [assignee_id], references: [userId])
+  submissions TaskSubmission[]
 }
 
 model TaskSubmission {
@@ -104,7 +105,7 @@ model TaskSubmission {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  assignment  TaskAssignment @relation(fields: [assignId], references: [assignId])
+  assignment TaskAssignment @relation(fields: [assignId], references: [assignId])
 }
 
 model Department {
@@ -114,6 +115,17 @@ model Department {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-    // Relations
-  users        User[]
+  // Relations
+  users User[]
+}
+
+model EvaluationMetrics {
+  metricId     String   @id @default(uuid())
+  evaluationId String
+  aiScores     Json
+  timestamp    DateTime @default(now())
+
+  //Relations
+
+  evaluation Evaluation @relation(fields: [evaluationId], references: [evaluationId])
 }

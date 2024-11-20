@@ -1,8 +1,12 @@
 // evaluations.controllers.js
 import { PrismaClient } from "@prisma/client";
 import { validationResult } from "express-validator";
+import { PerformanceAnalyzer } from '../ai/deberta.js';
 
 const prisma = new PrismaClient();
+
+const analyzer = new PerformanceAnalyzer();
+
 
 // evaluations.controllers.js
 export const createEvaluation = async (req, res) => {
@@ -64,6 +68,19 @@ export const createEvaluation = async (req, res) => {
       include: {
         evaluator: true,
         evaluated: true
+      }
+    });
+    const aiAnalysis = await analyzer.analyzePerformance({
+      feedback,
+      rating
+    });
+
+    // Store AI analysis results
+    await prisma.evaluationMetrics.create({
+      data: {
+        evaluationId: evaluation.evaluationId,
+        aiScores: aiAnalysis,
+        timestamp: new Date()
       }
     });
 
@@ -255,4 +272,3 @@ export const getStaffEvaluations = async (req, res) => {
     });
   }
 };
-
