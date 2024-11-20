@@ -2,58 +2,140 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
-// Create Notification
-export const createNotification = async (req, res) => {
+// Notification types
+const NotificationType = {
+  TASK_ASSIGNED: 'task_assigned',
+  TASK_UPDATED: 'task_updated',
+  FEEDBACK_REQUEST: 'feedback_request',
+  MESSAGE_RECEIVED: 'message_received'
+};
+
+// Create Task Assignment Notification
+// notifications.controllers.js
+export const createTaskNotification = async (req, res) => {
   try {
-    const { userId, type, message } = req.body;
+    const { taskId, assigneeId } = req.params;
+    
+    // Validate task exists
+    const task = await prisma.task.findUnique({
+      where: { taskId },
+      include: { creator: true }
+    });
+
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        error: "Task not found"
+      });
+    }
+
+    // Validate assignee exists
+    const assignee = await prisma.user.findUnique({
+      where: { userId: assigneeId }
+    });
+
+    if (!assignee) {
+      return res.status(404).json({
+        success: false,
+        error: "Assignee not found"
+      });
+    }
 
     const notification = await prisma.notification.create({
       data: {
-        userId,
-        type,
-        message,
-        read: false,
+        userId: assigneeId,
+        type: NotificationType.TASK_ASSIGNED,
+        message: `New task "${task.title}" has been assigned to you`,
+        read: false
       },
       include: {
-        user: true,
-      },
+        user: true
+      }
     });
 
     res.status(201).json({
       success: true,
-      data: notification,
+      data: notification
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message,
+      error: error.message
     });
   }
 };
 
-// Get All User Notifications
-export const getUserNotifications = async (req, res) => {
+// Create Feedback Request Notification
+export const createFeedbackRequestNotification = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { lecturerId } = req.params;
+    const requestedBy = req.user.userId; // Get from authenticated user
 
-    const notifications = await prisma.notification.findMany({
-      where: { userId },
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        user: true,
-      },
+    // Validate lecturer exists
+    const lecturer = await prisma.user.findFirst({
+      where: {
+        userId: lecturerId,
+        role: 'lecturer'
+      }
     });
 
-    res.json({
+    if (!lecturer) {
+      return res.status(404).json({
+        success: false,
+        error: "Lecturer not found"
+      });
+    }
+
+    const notification = await prisma.notification.create({
+      data: {
+        userId: lecturerId,
+        type: NotificationType.FEEDBACK_REQUEST,
+        message: `Feedback requested by ${req.user.role}`,
+        read: false
+      },
+      include: {
+        user: true
+      }
+    });
+
+    res.status(201).json({
       success: true,
-      data: notifications,
+      data: notification
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message,
+      error: error.message
+    });
+  }
+};
+
+// Get User's Unread Notifications
+export const getUnreadNotifications = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const notifications = await prisma.notification.findMany({
+      where: {
+        userId,
+        read: false
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include: {
+        user: true
+      }
+    });
+
+    res.json({
+      success: true,
+      data: notifications
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message
     });
   }
 };
@@ -62,45 +144,20 @@ export const getUserNotifications = async (req, res) => {
 export const markAsRead = async (req, res) => {
   try {
     const { notifyId } = req.params;
-
+    
     const notification = await prisma.notification.update({
       where: { notifyId },
-      data: { read: true },
+      data: { read: true }
     });
 
     res.json({
       success: true,
-      data: notification,
+      data: notification
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message,
-    });
-  }
-};
-
-// Mark All as Read
-export const markAllAsRead = async (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    await prisma.notification.updateMany({
-      where: {
-        userId,
-        read: false,
-      },
-      data: { read: true },
-    });
-
-    res.json({
-      success: true,
-      message: "All notifications marked as read",
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message,
+      error: error.message
     });
   }
 };
@@ -109,19 +166,19 @@ export const markAllAsRead = async (req, res) => {
 export const deleteNotification = async (req, res) => {
   try {
     const { notifyId } = req.params;
-
+    
     await prisma.notification.delete({
-      where: { notifyId },
+      where: { notifyId }
     });
 
     res.json({
       success: true,
-      message: "Notification deleted successfully",
+      message: "Notification deleted successfully"
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message,
+      error: error.message
     });
   }
 };

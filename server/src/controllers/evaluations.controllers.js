@@ -4,31 +4,27 @@ import { validationResult } from "express-validator";
 
 const prisma = new PrismaClient();
 
+// evaluations.controllers.js
 export const createEvaluation = async (req, res) => {
   try {
+    const { lecturerId } = req.params; // Get lecturer ID from params
+    const studentId = req.user.userId; // Get student ID from authenticated user
+    const { feedback, rating } = req.body;
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { feedback, rating, studentId, lecturerId } = req.body;
-
-    // Validate student exists and has student role
-    const student = await prisma.user.findFirst({
-      where: {
-        userId: studentId,
-        role: 'student'
-      }
-    });
-
-    if (!student) {
-      return res.status(404).json({
+    // Verify authenticated user is a student
+    if (req.user.role !== 'student') {
+      return res.status(403).json({
         success: false,
-        error: "Student not found or user is not a student"
+        error: "Only students can submit evaluations"
       });
     }
 
-    // Validate lecturer exists and has lecturer role
+    // Validate lecturer exists
     const lecturer = await prisma.user.findFirst({
       where: {
         userId: lecturerId,
@@ -39,7 +35,22 @@ export const createEvaluation = async (req, res) => {
     if (!lecturer) {
       return res.status(404).json({
         success: false,
-        error: "Lecturer not found or user is not a lecturer"
+        error: "Lecturer not found"
+      });
+    }
+
+    // Check if student already evaluated this lecturer
+    const existingEvaluation = await prisma.evaluation.findFirst({
+      where: {
+        studentId,
+        lecturerId
+      }
+    });
+
+    if (existingEvaluation) {
+      return res.status(400).json({
+        success: false,
+        error: "You have already evaluated this lecturer"
       });
     }
 
@@ -47,8 +58,8 @@ export const createEvaluation = async (req, res) => {
       data: {
         feedback,
         rating,
-        studentId: student.userId,
-        lecturerId: lecturer.userId
+        studentId,
+        lecturerId
       },
       include: {
         evaluator: true,
@@ -220,3 +231,28 @@ export const getLecturerEvaluations = async (req, res) => {
     });
   }
 };
+
+// Get Evaluations by Staff
+export const getStaffEvaluations = async (req, res) => {
+  try {
+    const { staffId } = req.params;
+
+    const evaluations = await prisma.evaluation.findMany({
+      where: { staffId },
+      include: {
+        evaluated: true,
+      }, 
+    });
+
+    res.json({
+      success: true,
+      data: evaluations,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: error.message,
+    });
+  }
+};
+

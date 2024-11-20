@@ -11,14 +11,17 @@ import {
   deleteEvaluation,
   getStudentEvaluations,
   getLecturerEvaluations,
+  getStaffEvaluations
 } from "../controllers/evaluations.controllers.js";
 
 const router = Router();
 
 router.post(
-  "/create",
+  '/lecturer/:userId/evaluate',
   authenticateToken,
-  createEvaluation,
+  checkRole("student", "staff", "admin", "lecturer"),
+  validateEvaluation,
+  createEvaluation
 );
 
 router.get("/", authenticateToken, getAllEvaluations);
@@ -43,5 +46,8 @@ router.delete(
 router.get("/student/:studentId", authenticateToken, getStudentEvaluations);
 
 router.get("/lecturer/:lecturerId", authenticateToken, getLecturerEvaluations);
+
+router.get("/staff/:staffId", authenticateToken, getStaffEvaluations);
+
 
 export default router;
