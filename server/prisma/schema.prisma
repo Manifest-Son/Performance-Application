@@ -38,7 +38,7 @@ model Task {
   taskId         String           @id @default(uuid())
   title          String
   description    String
-  creatorId      String           @map("creator_id")
+  creatorId      String?           @map("creator_id")
   startDate      String           @map("start_date")
   completionDate String           @map("completion_date")
   status         String
@@ -46,7 +46,7 @@ model Task {
   updatedAt      DateTime         @updatedAt
 
   // Relations
-  creator        User             @relation("TaskCreator", fields: [creatorId], references: [userId])
+  creator        User?             @relation("TaskCreator", fields: [creatorId], references: [userId])
   assignments    TaskAssignment[]
 }
 
@@ -82,8 +82,8 @@ model TaskAssignment {
   taskId       String   @map("task_id")
   assignee_id  String   @map("assignee_id")
   status       String
-  acceptedAt   DateTime @default(now())
-  rejectededAt DateTime
+  acceptedAt   DateTime? 
+  rejectededAt DateTime?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

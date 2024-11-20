@@ -37,7 +37,7 @@ router.delete(
 );
 router.patch(
   "/:userId",
-  // authenticateToken,
+  authenticateToken,
   validateUpdateUser,
   handleValidationErrors,
   updateUser,

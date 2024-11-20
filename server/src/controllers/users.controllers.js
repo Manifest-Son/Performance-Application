@@ -33,23 +33,25 @@ const loginUser = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
-    const token = jwt.sign(
-      {
-        userId: user.userId,
-        fname: user.fname,
-        lname: user.lname,
-        email: user.email,
-        role: user.role,
-        updatedAt: user.updatedAt,
-        createdAt: user.createdAt,
-        avatar: user.avatar,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" },
-    );
-    res.json({ token });
+    const payload = {
+      userId: user.userId,
+      fname: user.fname,
+      lname: user.lname,
+      email: user.email,
+      role: user.role,
+      updatedAt: user.updatedAt,
+      createdAt: user.createdAt,
+      avatar: user.avatar,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
+    res.cookie("access_token", token).json({ success: true, data: payload });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error. Please refresh." });
   }
 };
 
@@ -57,7 +59,9 @@ const deleteUser = async (req, res) => {
   const { userId } = req.params;
   try {
     await prisma.user.delete({ where: { userId } });
-    res.status(204).send();
+    res
+      .status(200)
+      .send({ success: true, message: "User deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -71,9 +75,9 @@ const updateUser = async (req, res) => {
       where: { userId },
       data: { fname, lname, email, role, deptId },
     });
-    res.json(user);
+    res.json({ success: true, data: user });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ success: false, error: error.message });
   }
 };
 
