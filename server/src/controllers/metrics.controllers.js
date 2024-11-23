@@ -1,7 +1,7 @@
 // metrics.controllers.js
-import { PrismaClient } from '@prisma/client';
-import { PerformanceMetrics } from '../ai/metrics.js';
-import { validationResult } from 'express-validator';
+import { PrismaClient } from "@prisma/client";
+import { PerformanceMetrics } from "../ai/metrics.js";
+import { validationResult } from "express-validator";
 
 const prisma = new PrismaClient();
 const metrics = new PerformanceMetrics();
@@ -15,20 +15,20 @@ export const getLecturerMetrics = async (req, res) => {
       where: { lecturerId },
       include: {
         evaluationMetrics: true,
-        evaluated: true
-      }
+        evaluated: true,
+      },
     });
 
     const metricsData = await metrics.analyzeMetrics(evaluations);
 
     res.json({
       success: true,
-      data: metricsData
+      data: metricsData,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -41,33 +41,33 @@ export const getDepartmentMetrics = async (req, res) => {
     const lecturers = await prisma.user.findMany({
       where: {
         deptId: departmentId,
-        role: 'lecturer'
+        role: "lecturer",
       },
       include: {
         evaluationsReceived: {
           include: {
-            evaluationMetrics: true
-          }
-        }
-      }
+            evaluationMetrics: true,
+          },
+        },
+      },
     });
 
     const departmentMetrics = await Promise.all(
       lecturers.map(async (lecturer) => ({
         lecturerId: lecturer.userId,
         name: `${lecturer.fname} ${lecturer.lname}`,
-        metrics: await metrics.analyzeMetrics(lecturer.evaluationsReceived)
-      }))
+        metrics: await metrics.analyzeMetrics(lecturer.evaluationsReceived),
+      })),
     );
 
     res.json({
       success: true,
-      data: departmentMetrics
+      data: departmentMetrics,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -76,7 +76,7 @@ export const getDepartmentMetrics = async (req, res) => {
 export const getTrendingMetrics = async (req, res) => {
   try {
     const { lecturerId } = req.params;
-    const { period = '6months' } = req.query;
+    const { period = "6months" } = req.query;
 
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() - 6);
@@ -85,27 +85,27 @@ export const getTrendingMetrics = async (req, res) => {
       where: {
         lecturerId,
         createdAt: {
-          gte: startDate
-        }
+          gte: startDate,
+        },
       },
       include: {
-        evaluationMetrics: true
+        evaluationMetrics: true,
       },
       orderBy: {
-        createdAt: 'asc'
-      }
+        createdAt: "asc",
+      },
     });
 
     const trendData = await metrics.analyzeTrends(evaluations);
 
     res.json({
       success: true,
-      data: trendData
+      data: trendData,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 };

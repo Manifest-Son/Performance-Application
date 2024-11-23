@@ -1,6 +1,6 @@
 // src/stores/authStore.js
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export const useAuthStore = create(
   persist(
@@ -13,10 +13,10 @@ export const useAuthStore = create(
       logout: () => set({ user: null, token: null, isAuthenticated: false }),
     }),
     {
-      name: 'auth-storage',
-    }
-  )
-)
+      name: "auth-storage",
+    },
+  ),
+);
 
 export const useTaskStore = create((set) => ({
   tasks: [],
@@ -24,28 +24,34 @@ export const useTaskStore = create((set) => ({
   error: null,
   setTasks: (tasks) => set({ tasks }),
   addTask: (task) => set((state) => ({ tasks: [...state.tasks, task] })),
-  updateTask: (updatedTask) => 
+  updateTask: (updatedTask) =>
     set((state) => ({
-      tasks: state.tasks.map(task => 
-        task.id === updatedTask.id ? updatedTask : task
-      )
+      tasks: state.tasks.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task,
+      ),
     })),
-  deleteTask: (taskId) => 
+  deleteTask: (taskId) =>
     set((state) => ({
-      tasks: state.tasks.filter(task => task.id !== taskId)
+      tasks: state.tasks.filter((task) => task.id !== taskId),
     })),
   setLoading: (loading) => set({ loading }),
-  setError: (error) => set({ error })
-}))
-
+  setError: (error) => set({ error }),
+}));
 
 export const useMetricsStore = create((set) => ({
   metrics: null,
-  trendingMetrics: null,
+  lecturerMetrics: {},
   loading: false,
   error: null,
   setMetrics: (metrics) => set({ metrics }),
   setTrendingMetrics: (trendingMetrics) => set({ trendingMetrics }),
+  setLecturerMetrics: (lecturerId, metrics) =>
+    set((state) => ({
+      lecturerMetrics: {
+        ...state.lecturerMetrics,
+        [lecturerId]: metrics,
+      },
+    })),
   setLoading: (loading) => set({ loading }),
-  setError: (error) => set({ error })
-}))
+  setError: (error) => set({ error }),
+}));

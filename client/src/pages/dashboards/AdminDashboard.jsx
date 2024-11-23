@@ -24,12 +24,6 @@ const AdminDashboard = () => {
   return (
     <DashboardLayout menuItems={adminMenuItems} userRole="Admin">
       <h1>Admin Dashboard</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Unde nisi,
-        quibusdam sed accusamus consequuntur consectetur quae facilis nihil
-        reiciendis, sequi odit! Autem, soluta. Corporis saepe omnis placeat et
-        sit consequatur.
-      </p>
       <AdminDashboardContent />
     </DashboardLayout>
   );

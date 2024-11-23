@@ -2,19 +2,18 @@ import "./Signin.css";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { apiURL } from "../../config/config";
 import toast from "react-simple-toasts";
 import "react-simple-toasts/dist/theme/success.css";
 import "react-simple-toasts/dist/theme/failure.css";
-
 
 const validationSchema = Yup.object({
   fname: Yup.string()
     .required("Please enter your full name")
     .min(4, "Please enter your full name")
     .max(20, "Please enter a valid name"),
-    lname: Yup.string()
+  lname: Yup.string()
     .required("Please enter your full name")
     .min(4, "Please enter your full name")
     .max(20, "Please enter a valid name"),
@@ -27,7 +26,7 @@ const validationSchema = Yup.object({
 
 const Signin = () => {
   const [loading, setLoading] = useState(false);
-  const  navigate = useNavigate()
+  const navigate = useNavigate();
 
   const initialValues = {
     fname: "",
@@ -42,7 +41,7 @@ const Signin = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       const { confirmPassword, ...signupData } = formData; // Remove confirmPassword from API payload
-      
+
       const response = await fetch(`${apiURL}/users/signup`, {
         method: "POST",
         headers: {
@@ -51,14 +50,17 @@ const Signin = () => {
         body: JSON.stringify(signupData),
         credentials: "include",
       });
-      console.log(response)
+      console.log(response);
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Signup failed");
       }
 
-      toast("Account created successfully!", { theme: "success", duration: 2000 });
+      toast("Account created successfully!", {
+        theme: "success",
+        duration: 2000,
+      });
       navigate("/login");
     } catch (err) {
       toast(err.message, { theme: "failure", duration: 3000 });

@@ -9,6 +9,7 @@ import toast from "react-simple-toasts";
 import "react-simple-toasts/dist/theme/success.css";
 import "react-simple-toasts/dist/theme/failure.css";
 import { useAuthStore } from "../../stores/store";
+import ForgotPassword from "./ForgotPassword"
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -24,6 +25,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const { setUser, setToken } = useAuthStore()
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
   
   const initialValues = {
@@ -42,31 +44,60 @@ const Login = () => {
         body: JSON.stringify({ ...formState, rememberMe }),
         credentials: "include",
       });
+
       const data = await response.json();
-      
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
 
       toast("Login Successful", { theme: "success", duration: 2000 });
-      
-      setUser(data.data)
-      setToken(data.token)
+
+      // Setting up the Remember Me functionality
+      if (rememberMe) {
+        localStorage.setItem("token", data.token);
+      } else {
+        sessionStorage.setItem("token", data.token);
+      }
+
+      setUser(data.data);
+      setToken(data.token);
 
       const roleRedirects = {
         admin: "/admin",
         lecturer: "/lecturer",
         student: "/student",
-        default: "/staff"
+        default: "/staff",
       };
 
       const userRole = data.data.role.toLowerCase();
       navigate(roleRedirects[userRole] || roleRedirects.default);
-      
     } catch (err) {
       toast(err.message, { theme: "failure", duration: 2000 });
     } finally {
       setLoading(false);
+    }
+  };
+  const handleForgotPassword = async (email) => {
+    try {
+      const response = await fetch(`${apiURL}/users/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      toast.success('Password reset link sent to your email');
+      setShowForgotPassword(false);
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -124,9 +155,13 @@ const Login = () => {
                 />
                 Remember Me
               </label>
-              <a className="forgot-password" href="/forgot-password">
-                Forgot Password?
-              </a>
+              <button 
+                type="button"
+                className="forgot-password"
+                onClick={() => setShowForgotPassword(true)}
+              >
+                Forgot password?
+              </button>
             </div>
             
             <button
@@ -136,7 +171,11 @@ const Login = () => {
             >
               {loading ? "Logging In..." : "Log In"}
             </button>
-            
+            <ForgotPassword
+        isOpen={showForgotPassword}
+        onClose={() => setShowForgotPassword(false)}
+        onSubmit={handleForgotPassword}
+      />
             <p className="signup-link">
               Don&#x27;t have an account? <a href="/signin">Sign Up</a>
             </p>

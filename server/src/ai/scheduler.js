@@ -1,7 +1,6 @@
 // src/services/ai/scheduler.js
-import { PerformanceAnalyzer } from './deberta.js';
-import {wsServer} from "../index.js"
-import cron from 'node-cron';
+import { PerformanceAnalyzer } from "./deberta.js";
+import cron from "node-cron";
 
 export class TaskScheduler {
   constructor() {
@@ -14,7 +13,7 @@ export class TaskScheduler {
       taskTitle: task.title,
       dueDate: task.completionDate,
       priority: task.priority,
-      lecturerPerformance: await this.analyzer.analyzePerformance(lecturer)
+      lecturerPerformance: await this.analyzer.analyzePerformance(lecturer),
     };
 
     const reminder = await this.analyzer.generateReminder(context);
@@ -23,29 +22,29 @@ export class TaskScheduler {
 
   scheduleReminders() {
     // Daily morning reminders
-    cron.schedule('0 9 * * *', async () => {
+    cron.schedule("0 9 * * *", async () => {
       const pendingTasks = await prisma.taskAssignment.findMany({
-        where: { status: 'pending' },
+        where: { status: "pending" },
         include: {
           assignee: true,
-          task: true
-        }
+          task: true,
+        },
       });
 
       for (const task of pendingTasks) {
         const smartReminder = await this.generateSmartReminder(
           task.task,
-          task.assignee
+          task.assignee,
         );
 
         await prisma.notification.create({
           data: {
             userId: task.assignee_id,
-            type: 'TASK_REMINDER',
+            type: "TASK_REMINDER",
             message: smartReminder,
             read: false,
-            aiGenerated: true
-          }
+            aiGenerated: true,
+          },
         });
       }
     });

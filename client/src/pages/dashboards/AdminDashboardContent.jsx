@@ -1,29 +1,29 @@
 // AdminDashboardContent.jsx
-// import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import DashboardCard from "../../components/DashboardCard";
-// import { getPerformanceMetrics } from "../../components/services/MetricsService";
-// import AIChat from "../../ai/AIChat";
-// import AnalyticsBoard from "../../components/analytics/AnalyticsBoard";
-import "../../styling/AdminDashboard.css"
+import { getPerformanceMetrics } from "../../components/services/MetricsService";
+import AnalyticsBoard from "../../components/analytics/AnalyticsBoard";
+import PerformanceMetrics from "../../components/performance/PerformanceMetrics";
+import "../../styling/AdminDashboard.css";
 
 const AdminDashboardContent = () => {
-  // const [metrics, setMetrics] = useState(null);
-  // const [loading, setLoading] = useState(true);
+  const [metrics, setMetrics] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   fetchMetrics();
-  // }, []);
+  useEffect(() => {
+    fetchMetrics();
+  }, []);
 
-  // const fetchMetrics = async () => {
-  //   try {
-  //     const data = await getPerformanceMetrics();
-  //     setMetrics(data);
-  //   } catch (error) {
-  //     console.error('Error fetching metrics:', error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
+  const fetchMetrics = async () => {
+    try {
+      const data = await getPerformanceMetrics();
+      setMetrics(data);
+    } catch (error) {
+      console.error("Error fetching metrics:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="dashboard-layout">
@@ -49,8 +49,8 @@ const AdminDashboardContent = () => {
             color="#FF9800"
           />
         </div>
-        
-        {/* <div className="analytics-section">
+
+        <div className="analytics-section">
           <h2 className="section-title">Analytics</h2>
           <AnalyticsBoard metrics={metrics} loading={loading} />
         </div>
@@ -61,11 +61,6 @@ const AdminDashboardContent = () => {
           <h3>Performance Metrics</h3>
           <PerformanceMetrics data={metrics} loading={loading} />
         </div>
-        
-        <div className="ai-chat-panel">
-          <h3>AI Assistant</h3>
-          <AIChat />
-        </div> */}
       </div>
     </div>
   );

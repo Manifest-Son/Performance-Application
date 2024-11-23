@@ -1,12 +1,11 @@
 // evaluations.controllers.js
 import { PrismaClient } from "@prisma/client";
 import { validationResult } from "express-validator";
-import { PerformanceAnalyzer } from '../ai/deberta.js';
+import { PerformanceAnalyzer } from "../ai/deberta.js";
 
 const prisma = new PrismaClient();
 
 const analyzer = new PerformanceAnalyzer();
-
 
 // evaluations.controllers.js
 export const createEvaluation = async (req, res) => {
@@ -21,10 +20,10 @@ export const createEvaluation = async (req, res) => {
     }
 
     // Verify authenticated user is a student
-    if (req.user.role !== 'student') {
+    if (req.user.role !== "student") {
       return res.status(403).json({
         success: false,
-        error: "Only students can submit evaluations"
+        error: "Only students can submit evaluations",
       });
     }
 
@@ -32,14 +31,14 @@ export const createEvaluation = async (req, res) => {
     const lecturer = await prisma.user.findFirst({
       where: {
         userId: lecturerId,
-        role: 'lecturer'
-      }
+        role: "lecturer",
+      },
     });
 
     if (!lecturer) {
       return res.status(404).json({
         success: false,
-        error: "Lecturer not found"
+        error: "Lecturer not found",
       });
     }
 
@@ -47,14 +46,14 @@ export const createEvaluation = async (req, res) => {
     const existingEvaluation = await prisma.evaluation.findFirst({
       where: {
         studentId,
-        lecturerId
-      }
+        lecturerId,
+      },
     });
 
     if (existingEvaluation) {
       return res.status(400).json({
         success: false,
-        error: "You have already evaluated this lecturer"
+        error: "You have already evaluated this lecturer",
       });
     }
 
@@ -63,16 +62,16 @@ export const createEvaluation = async (req, res) => {
         feedback,
         rating,
         studentId,
-        lecturerId
+        lecturerId,
       },
       include: {
         evaluator: true,
-        evaluated: true
-      }
+        evaluated: true,
+      },
     });
     const aiAnalysis = await analyzer.analyzePerformance({
       feedback,
-      rating
+      rating,
     });
 
     // Store AI analysis results
@@ -80,18 +79,18 @@ export const createEvaluation = async (req, res) => {
       data: {
         evaluationId: evaluation.evaluationId,
         aiScores: aiAnalysis,
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     });
 
     res.status(201).json({
       success: true,
-      data: evaluation
+      data: evaluation,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -258,7 +257,7 @@ export const getStaffEvaluations = async (req, res) => {
       where: { staffId },
       include: {
         evaluated: true,
-      }, 
+      },
     });
 
     res.json({

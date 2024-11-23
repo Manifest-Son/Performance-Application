@@ -11,17 +11,17 @@ import {
   deleteEvaluation,
   getStudentEvaluations,
   getLecturerEvaluations,
-  getStaffEvaluations
+  getStaffEvaluations,
 } from "../controllers/evaluations.controllers.js";
 
 const router = Router();
 
 router.post(
-  '/lecturer/:userId/evaluate',
+  "/lecturer/:userId/evaluate",
   authenticateToken,
   checkRole("student", "staff", "admin", "lecturer"),
   validateEvaluation,
-  createEvaluation
+  createEvaluation,
 );
 
 router.get("/", authenticateToken, getAllEvaluations);
@@ -48,6 +48,5 @@ router.get("/student/:studentId", authenticateToken, getStudentEvaluations);
 router.get("/lecturer/:lecturerId", authenticateToken, getLecturerEvaluations);
 
 router.get("/staff/:staffId", authenticateToken, getStaffEvaluations);
-
 
 export default router;

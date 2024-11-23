@@ -108,12 +108,10 @@ export const deleteTask = async (req, res) => {
       .send({ success: true, message: "Task deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Server error. Please refresh your browser",
-      });
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please refresh your browser",
+    });
   }
 };
 

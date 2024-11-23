@@ -1,5 +1,7 @@
 import DashboardCard from "../../components/DashboardCard";
+// import {useNavigate } from "react-router-dom"
 
+// const navigate = useNavigate()
 const StaffDashboardContent = () => {
   return (
     <div className="dashboard-content">
@@ -24,24 +26,30 @@ const StaffDashboardContent = () => {
           color="#FF9800"
         />
         <DashboardCard
-          title="Revenue"
-          value="$45,678"
+          title="Tasks Handed"
+          value="4"
+          icon="fas fa-dollar-sign"
+          color="#9C27B0"
+        />
+        <DashboardCard
+          title="Tasks Awaiting"
+          value="7"
           icon="fas fa-dollar-sign"
           color="#9C27B0"
         />
       </div>
 
-      <h2 className="section-title">System Status</h2>
+      <h2 className="section-title">Completed Tasks</h2>
       <div className="cards-grid">
         <DashboardCard
-          title="Server Load"
-          value="42%"
+          title="SCS 407"
+          value="Completed on 1 Oct 2024"
           icon="fas fa-server"
           color="#607D8B"
         />
         <DashboardCard
-          title="Storage Used"
-          value="756 GB"
+          title="SIT 304"
+          value="Completed on 21 Oct 2024"
           icon="fas fa-database"
           color="#795548"
         />

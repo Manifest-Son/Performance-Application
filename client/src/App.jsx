@@ -11,6 +11,7 @@ import AddTask from "./pages/tasks/AddTask";
 import UpdateTask from "./pages/tasks/UpdateTask";
 import DeleteTask from "./pages/tasks/DeleteTask";
 import AssignTask from "./pages/tasks/AssignTask";
+import AnalyticsBoard from "./components/analytics/AnalyticsBoard";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/" element={<AdminDashboard />} />
         <Route path="login" element={<Login />} />
         <Route path="signin" element={<Signin />} />
+        <Route path="analyze" element={<AnalyticsBoard />} />
         <Route path="add-task" element={<AddTask />} />
         <Route path="update-task" element={<UpdateTask />} />
         <Route path="delete-task" element={<DeleteTask />} />

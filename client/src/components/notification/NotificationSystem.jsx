@@ -1,25 +1,25 @@
 // src/components/NotificationSystem.jsx
-import { useEffect } from 'react';
-import { useNotificationStore } from '../stores/notificationStore';
-import toast from 'react-hot-toast';
+import { useEffect } from "react";
+import { useNotificationStore } from "../stores/notificationStore";
+import toast from "react-hot-toast";
 
 const NotificationSystem = () => {
   const { notifications, markAsRead } = useNotificationStore();
 
   useEffect(() => {
-    const ws = new WebSocket('ws://your-websocket-server');
-    
+    const ws = new WebSocket("ws://your-websocket-server");
+
     ws.onmessage = (event) => {
       const notification = JSON.parse(event.data);
-      if (notification.type === 'TASK_ASSIGNMENT') {
+      if (notification.type === "TASK_ASSIGNMENT") {
         toast.success(notification.message, {
           duration: 5000,
-          icon: '🎯'
+          icon: "🎯",
         });
-      } else if (notification.type === 'TASK_REMINDER') {
+      } else if (notification.type === "TASK_REMINDER") {
         toast.info(notification.message, {
           duration: 5000,
-          icon: '⏰'
+          icon: "⏰",
         });
       }
     };
@@ -29,10 +29,10 @@ const NotificationSystem = () => {
 
   return (
     <div className="notifications-panel">
-      {notifications.map(notification => (
-        <div 
-          key={notification.id} 
-          className={`notification ${notification.read ? 'read' : 'unread'}`}
+      {notifications.map((notification) => (
+        <div
+          key={notification.id}
+          className={`notification ${notification.read ? "read" : "unread"}`}
           onClick={() => markAsRead(notification.id)}
         >
           <p>{notification.message}</p>

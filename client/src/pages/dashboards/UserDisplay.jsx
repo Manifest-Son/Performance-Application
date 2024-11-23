@@ -6,7 +6,7 @@ import simonImg from "../../data/simon.jpg";
 
 const mockUserData = [
   {
-    name: "John Doe",
+    name: "John Maina",
     role: "Project Manager",
     avatar: simonImg,
     stats: {
@@ -18,8 +18,8 @@ const mockUserData = [
     status: "online",
   },
   {
-    name: "John Doe",
-    role: "Project Manager",
+    name: "Mariam Ng'etich",
+    role: "Networking",
     avatar: simonImg,
     stats: {
       tasksCompleted: 15,
@@ -30,8 +30,8 @@ const mockUserData = [
     status: "online",
   },
   {
-    name: "John Doe",
-    role: "Project Manager",
+    name: "Geoffery Kamau",
+    role: "Cyber Security",
     avatar: simonImg,
     stats: {
       tasksCompleted: 15,
@@ -42,8 +42,8 @@ const mockUserData = [
     status: "online",
   },
   {
-    name: "John Doe",
-    role: "Project Manager",
+    name: "Lennox Githinji",
+    role: "Artificial Intelligence",
     avatar: simonImg,
     stats: {
       tasksCompleted: 15,

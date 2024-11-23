@@ -1,13 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { pipeline } from '@xenova/transformers';
-import { v4 as uuidv4 } from 'uuid';
+import { pipeline } from "@xenova/transformers";
+import { v4 as uuidv4 } from "uuid";
 
 export class TrainingPipeline {
   constructor(config = {}) {
     this.model = null;
     this.tokenizer = null;
-    this.modelVersion = uuidv4(); 
+    this.modelVersion = uuidv4();
     this.config = {
       validationSplit: 0.2,
       testSplit: 0.1,
@@ -16,12 +16,15 @@ export class TrainingPipeline {
       numEpochs: 3,
       batchSize: 8,
       earlyStoppingPatience: 2,
-      ...config
+      ...config,
     };
   }
 
   async initialize() {
-    this.model = await pipeline('text-classification', 'microsoft/deberta-v3-base');
+    this.model = await pipeline(
+      "text-classification",
+      "microsoft/deberta-v3-base",
+    );
     console.log(`Initialized model version: ${this.modelVersion}`);
   }
 
@@ -29,28 +32,33 @@ export class TrainingPipeline {
     const evaluations = await prisma.evaluation.findMany({
       include: {
         evaluated: true,
-        evaluationMetrics: true
-      }
+        evaluationMetrics: true,
+      },
     });
 
     // Clean and preprocess data
     const processedData = evaluations
-      .filter(evaluation => evaluation.feedback && evaluation.feedback.trim().length > 0)
-      .map(evaluation => ({
+      .filter(
+        (evaluation) =>
+          evaluation.feedback && evaluation.feedback.trim().length > 0,
+      )
+      .map((evaluation) => ({
         text: this.preprocessText(evaluation.feedback),
         label: this.getLabelFromRating(evaluation.rating),
-        metrics: evaluation.evaluationMetrics
+        metrics: evaluation.evaluationMetrics,
       }));
 
     // Split data
     const shuffledData = this.shuffleArray(processedData);
     const testSize = Math.floor(shuffledData.length * this.config.testSplit);
-    const validationSize = Math.floor(shuffledData.length * this.config.validationSplit);
-    
+    const validationSize = Math.floor(
+      shuffledData.length * this.config.validationSplit,
+    );
+
     return {
       train: shuffledData.slice(testSize + validationSize),
       validation: shuffledData.slice(testSize, testSize + validationSize),
-      test: shuffledData.slice(0, testSize)
+      test: shuffledData.slice(0, testSize),
     };
   }
 
@@ -58,8 +66,8 @@ export class TrainingPipeline {
     return text
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, ' ')    // normalize whitespace
-      .replace(/[^\w\s]/g, '') // remove special characters
+      .replace(/\s+/g, " ") // normalize whitespace
+      .replace(/[^\w\s]/g, "") // remove special characters
       .slice(0, this.config.maxLength);
   }
 
@@ -74,35 +82,35 @@ export class TrainingPipeline {
 
   getLabelFromRating(rating) {
     const ratingNum = parseInt(rating);
-    if (ratingNum >= 4) return 'excellent';
-    if (ratingNum >= 3) return 'good';
-    return 'needs_improvement';
+    if (ratingNum >= 4) return "excellent";
+    if (ratingNum >= 3) return "good";
+    return "needs_improvement";
   }
 
   async fineTune() {
     try {
       const { train, validation, test } = await this.prepareTrainingData();
-      
+
       let bestValidationLoss = Infinity;
       let patienceCounter = 0;
-      
+
       // Configure training parameters
       const trainingArgs = {
         learning_rate: this.config.learningRate,
         num_train_epochs: this.config.numEpochs,
         per_device_train_batch_size: this.config.batchSize,
-        evaluation_strategy: 'steps',
+        evaluation_strategy: "steps",
         eval_steps: 100,
-        save_strategy: 'steps',
+        save_strategy: "steps",
         save_steps: 100,
-        validation_data: validation
+        validation_data: validation,
       };
 
       // Training loop with early stopping
       for (let epoch = 0; epoch < this.config.numEpochs; epoch++) {
         const trainResults = await this.model.train(train, trainingArgs);
         const validationResults = await this.evaluate(validation);
-        
+
         // Early stopping check
         if (validationResults.loss < bestValidationLoss) {
           bestValidationLoss = validationResults.loss;
@@ -112,7 +120,7 @@ export class TrainingPipeline {
         } else {
           patienceCounter++;
           if (patienceCounter >= this.config.earlyStoppingPatience) {
-            console.log('Early stopping triggered');
+            console.log("Early stopping triggered");
             break;
           }
         }
@@ -123,37 +131,36 @@ export class TrainingPipeline {
 
       // Final evaluation on test set
       const testMetrics = await this.evaluate(test);
-      
+
       // Save model metadata
       await this.saveModelMetadata(testMetrics);
 
       return {
         success: true,
-        message: 'Model fine-tuning completed',
+        message: "Model fine-tuning completed",
         modelVersion: this.modelVersion,
         testMetrics,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-
     } catch (error) {
-      console.error('Fine-tuning error:', error);
+      console.error("Fine-tuning error:", error);
       return {
         success: false,
         error: error.message,
-        modelVersion: this.modelVersion
+        modelVersion: this.modelVersion,
       };
     }
   }
 
   async evaluate(data) {
-    const predictions = await this.model(data.map(d => d.text));
-    const actualLabels = data.map(d => d.label);
-    
+    const predictions = await this.model(data.map((d) => d.text));
+    const actualLabels = data.map((d) => d.label);
+
     const metrics = {
       accuracy: this.calculateAccuracy(predictions, actualLabels),
       precision: this.calculatePrecision(predictions, actualLabels),
       recall: this.calculateRecall(predictions, actualLabels),
-      f1Score: this.calculateF1Score(predictions, actualLabels)
+      f1Score: this.calculateF1Score(predictions, actualLabels),
     };
 
     return metrics;
@@ -169,11 +176,11 @@ export class TrainingPipeline {
     const labels = [...new Set(actual)];
 
     for (const label of labels) {
-      const truePositives = predictions.filter((p, i) => 
-        p.label === label && actual[i] === label
+      const truePositives = predictions.filter(
+        (p, i) => p.label === label && actual[i] === label,
       ).length;
-      const falsePositives = predictions.filter((p, i) => 
-        p.label === label && actual[i] !== label
+      const falsePositives = predictions.filter(
+        (p, i) => p.label === label && actual[i] !== label,
       ).length;
 
       results[label] = truePositives / (truePositives + falsePositives);
@@ -187,11 +194,11 @@ export class TrainingPipeline {
     const labels = [...new Set(actual)];
 
     for (const label of labels) {
-      const truePositives = predictions.filter((p, i) => 
-        p.label === label && actual[i] === label
+      const truePositives = predictions.filter(
+        (p, i) => p.label === label && actual[i] === label,
       ).length;
-      const falseNegatives = predictions.filter((p, i) => 
-        p.label !== label && actual[i] === label
+      const falseNegatives = predictions.filter(
+        (p, i) => p.label !== label && actual[i] === label,
       ).length;
 
       results[label] = truePositives / (truePositives + falseNegatives);
@@ -206,8 +213,9 @@ export class TrainingPipeline {
     const f1Scores = {};
 
     for (const label in precision) {
-      f1Scores[label] = 2 * (precision[label] * recall[label]) / 
-                        (precision[label] + recall[label]);
+      f1Scores[label] =
+        (2 * (precision[label] * recall[label])) /
+        (precision[label] + recall[label]);
     }
 
     return f1Scores;
@@ -224,8 +232,8 @@ export class TrainingPipeline {
         version: this.modelVersion,
         configurationParams: JSON.stringify(this.config),
         testMetrics: JSON.stringify(testMetrics),
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     });
   }
 
@@ -238,8 +246,8 @@ export class TrainingPipeline {
         validationLoss: validationResults.loss,
         trainAccuracy: trainResults.accuracy,
         validationAccuracy: validationResults.accuracy,
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     });
   }
 }
@@ -252,13 +260,13 @@ const config = {
   learningRate: 3e-5,
   numEpochs: 5,
   batchSize: 16,
-  earlyStoppingPatience: 3
+  earlyStoppingPatience: 3,
 };
 
 async function trainModel() {
   const trainer = new TrainingPipeline(config);
   await trainer.initialize();
   const result = await trainer.fineTune();
-  console.log('Training complete:', result);
+  console.log("Training complete:", result);
   return result;
 }

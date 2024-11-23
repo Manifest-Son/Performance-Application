@@ -9,11 +9,6 @@ import departmentsRouter from "./src/routes/department.routes.js";
 import evaluationsRouter from "./src/routes/evaluations.routes.js";
 import taskAssignmentsRouter from "./src/routes/taskAssignment.routes.js";
 import metricsRouter from "./src/routes/metrics.routes.js";
-import { createServer } from 'http';
-import { NotificationWebSocket } from './config/websocket.js';
-
-const server = createServer(app);
-export const wsServer = new NotificationWebSocket(server);
 
 const app = express();
 const port = 3000;
@@ -41,10 +36,4 @@ app.use("/metrics", metricsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port 3000...`);
-});
-
-
-
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}...`);
 });
